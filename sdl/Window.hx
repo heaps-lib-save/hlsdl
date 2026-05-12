@@ -49,6 +49,7 @@ class Window {
 
 	var win : WinPtr;
 	var glctx : GLContext;
+	var isVulkan : Bool;
 	var lastFrame : Float;
 	public var id(get,never) : Int;
 	public var title(default, set) : String;
@@ -69,25 +70,26 @@ class Window {
 	public var grab(get, set) : Bool;
 
 	public function new( title : String, width : Int, height : Int, x : Int = SDL_WINDOWPOS_CENTERED, y : Int = SDL_WINDOWPOS_CENTERED, sdlFlags : Int = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE ) {
-		while( true ) {
+		isVulkan = (sdlFlags & SDL_WINDOW_VULKAN) != 0;
+		if( isVulkan ) {
 			win = winCreateEx(x, y, width, height, sdlFlags);
-			if( win == null ) throw "Failed to create window";
-			
-			glctx = winGetGLContext(win);
-			trace("glctx = " + glctx);
-			#if android
-			// Android 上确保 GL 上下文是当前上下文
-			if( glctx != null ) {
-				winRenderTo(win, glctx);  // 调用 SDL_GL_MakeCurrent
+			if( win == null ) throw "Failed to create Vulkan window";
+			glctx = null;
+		} else {
+			while( true ) {
+				win = winCreateEx(x, y, width, height, sdlFlags);
+				if( win == null ) throw "Failed to create window";
+				glctx = winGetGLContext(win);
+				#if android
+				if( glctx != null ) winRenderTo(win, glctx);
+				#end
+				if( glctx == null || !GL.init() || !testGL() ) {
+					destroy();
+					if( Sdl.onGlContextRetry() ) continue;
+					Sdl.onGlContextError();
+				}
+				break;
 			}
-			trace("GL context made current on Android");
-			#end
-			if( glctx == null || !GL.init() || !testGL() ) {
-				destroy();
-				if( Sdl.onGlContextRetry() ) continue;
-				Sdl.onGlContextError();
-			}
-			break;
 		}
 		this.title = title;
 		windows.push(this);
@@ -255,7 +257,8 @@ class Window {
 
 	function set_vsync(v) {
 		if( vsync == v ) return v;
-		setVsync(v);
+		if( !isVulkan )
+			setVsync(v);
 		return vsync = v;
 	}
 
@@ -285,22 +288,27 @@ class Window {
 		Set the current window you will render to (in case of multiple windows)
 	**/
 	public function renderTo() {
-		winRenderTo(win, glctx);
+		if( !isVulkan )
+			winRenderTo(win, glctx);
 	}
 
 	public function present() {
-		if( vsync && @:privateAccess Sdl.isWin32 ) {
-			// NVIDIA OpenGL windows driver does implement vsync as an infinite loop, causing high CPU usage
-			// make sure to sleep a bit here based on how much time we spent since the last frame
+		if( !isVulkan && vsync && @:privateAccess Sdl.isWin32 ) {
 			var spent = haxe.Timer.stamp() - lastFrame;
 			if( spent < 0.005 ) Sys.sleep(0.005 - spent);
 		}
-		winSwapWindow(win);
+		if( !isVulkan )
+			winSwapWindow(win);
 		lastFrame = haxe.Timer.stamp();
 	}
 
 	public function destroy() {
-		try winDestroy(win, glctx) catch( e : Dynamic ) {};
+		try {
+			if( isVulkan )
+				winDestroyVk(win)
+			else
+				winDestroy(win, glctx);
+		} catch( e : Dynamic ) {};
 		win = null;
 		glctx = null;
 		windows.remove(this);
@@ -396,6 +404,9 @@ class Window {
 	static function winDestroy( win : WinPtr, gl : GLContext ) {
 	}
 
+	static function winDestroyVk( win : WinPtr ) {
+	}
+
 	static function setVsync( b : Bool ) {
 	}
 
@@ -409,4 +420,6 @@ class Window {
 	static function warpMouseInWindow( win : WinPtr, x : Int, y : Int ) : Void {
 	}
 
+
 }
+
