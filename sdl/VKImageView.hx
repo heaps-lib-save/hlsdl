@@ -1,3 +1,3 @@
-﻿package sdl;
+package sdl;
 
-abstract VKImageView(Null<Int>) from Int to Int {}
+abstract VKImageView(Int) from Int to Int {}

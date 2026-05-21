@@ -1,3 +1,3 @@
-﻿package sdl;
+package sdl;
 
-abstract VKDescriptorLayout(Null<Int>) from Int to Int {}
+abstract VKDescriptorLayout(Int) from Int to Int {}

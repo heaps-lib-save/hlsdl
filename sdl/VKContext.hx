@@ -62,7 +62,7 @@ class VKContext {
 	public function cmdBindPipeline(cb:Int, pipeline:VKPipeline) { cmdBindPipeline_native(native, cb, cast pipeline); }
 	public function cmdBindVertexBuffer(cb:Int, binding:Int, buf:VKBuffer, offset:Int) { cmdBindVertexBuffer_native(native, cb, binding, cast buf, offset); }
 	public function cmdBindIndexBuffer(cb:Int, buf:VKBuffer, offset:Int, idxType:Int) { cmdBindIndexBuffer_native(native, cb, cast buf, offset, idxType); }
-	public function cmdSetViewport(cb:Int, x:Float, y:Float, w:Float, h:Float) { cmdSetViewport_native(native, cb, x, y, w, h); }
+	public function cmdSetViewport(cb:Int, x:Single, y:Single, w:Single, h:Single) { cmdSetViewport_native(native, cb, x, y, w, h); }
 	public function cmdSetScissor(cb:Int, x:Int, y:Int, w:Int, h:Int) { cmdSetScissor_native(native, cb, x, y, w, h); }
 	public function cmdDrawIndexed(cb:Int, idxCount:Int, instCount:Int, firstIdx:Int, vertOff:Int, firstInst:Int) { cmdDrawIndexed_native(native, cb, idxCount, instCount, firstIdx, vertOff, firstInst); }
 	public function cmdDraw(cb:Int, vertCount:Int, instCount:Int, firstVert:Int, firstInst:Int) { cmdDraw_native(native, cb, vertCount, instCount, firstVert, firstInst); }
@@ -99,13 +99,13 @@ class VKContext {
 	public function createImageView(img:VKImage,fmt:Int,aspect:Int,bm:Int,mc:Int,bl:Int,lc:Int) : VKImageView {
 		return cast createImageView_native(native, cast img, fmt, aspect, bm, mc, bl, lc);
 	}
-	public function createSampler(filter:Int, mipMode:Int, addrMode:Int, anisotropy:Bool = true, maxAnisotropy:Float = 16) : VKSampler {
+	public function createSampler(filter:Int, mipMode:Int, addrMode:Int, anisotropy:Bool = true, maxAnisotropy:Single = 16) : VKSampler {
 		return cast createSampler_native(native, filter, mipMode, addrMode, anisotropy, maxAnisotropy);
 	}
 	public function destroyImage(img:VKImage, mem:VKMemory) { destroyImage_native(native, cast img, cast mem); }
 	public function destroyImageView(v:VKImageView) { destroyImageView_native(native, cast v); }
 	public function destroySampler(s:VKSampler) { destroySampler_native(native, cast s); }
-	public function cmdSetDepthBias(cb:Int, cf:Float, clamp:Float, sf:Float) { cmdSetDepthBias_native(native, cb, cf, clamp, sf); }
+	public function cmdSetDepthBias(cb:Int, cf:Single, clamp:Single, sf:Single) { cmdSetDepthBias_native(native, cb, cf, clamp, sf); }
 	public function cmdPipelineBarrier(cb:Int, src:Int,dst:Int,sa:Int,da:Int,ol:Int,nl:Int,img:VKImage,aspect:Int,bm:Int,mc:Int,bl:Int,lc:Int) {
 		cmdPipelineBarrier_native(native, cb, src, dst, sa, da, ol, nl, cast img, aspect, bm, mc, bl, lc);
 	}
@@ -124,12 +124,12 @@ class VKContext {
 	@:hlNative("sdl_vk", "get_width") static function getWidth_native(ctx:NativeVKContext):Int return 0;
 	@:hlNative("sdl_vk", "get_height") static function getHeight_native(ctx:NativeVKContext):Int return 0;
 
-	@:hlNative("sdl_vk", "create_render_pass") static function createRenderPass_native(ctx:NativeVKContext, hasDepth:Bool, df:Int):VKRenderPass return null;
+	@:hlNative("sdl_vk", "create_render_pass") static function createRenderPass_native(ctx:NativeVKContext, hasDepth:Bool, df:Int):VKRenderPass return cast 0;
 	@:hlNative("sdl_vk", "create_framebuffers") static function createFramebuffers_native(ctx:NativeVKContext, rp:VKRenderPass):Bool return false;
 	@:hlNative("sdl_vk", "create_descriptor_pool") static function createDescriptorPool_native(ctx:NativeVKContext) {}
 	@:hlNative("sdl_vk", "create_command_pool") static function createCommandPool_native(ctx:NativeVKContext):Bool return false;
 	@:hlNative("sdl_vk", "create_command_buffers") static function createCommandBuffers_native(ctx:NativeVKContext, count:Int):Bool return false;
-	@:hlNative("sdl_vk", "get_command_buffer") static function getCommandBuffer_native(ctx:NativeVKContext, idx:Int):VKCommandBuffer return null;
+	@:hlNative("sdl_vk", "get_command_buffer") static function getCommandBuffer_native(ctx:NativeVKContext, idx:Int):VKCommandBuffer return cast 0;
 	@:hlNative("sdl_vk", "begin_command_buffer") static function beginCommandBuffer_native(ctx:NativeVKContext, idx:Int):Bool return false;
 	@:hlNative("sdl_vk", "end_command_buffer") static function endCommandBuffer_native(ctx:NativeVKContext, idx:Int):Bool return false;
 	@:hlNative("sdl_vk", "clear_color_image") static function clearColorImage_native(ctx:NativeVKContext, r:Float,g:Float,b:Float,a:Float) {}
@@ -155,7 +155,7 @@ class VKContext {
 	@:hlNative("sdl_vk", "cmd_bind_pipeline") static function cmdBindPipeline_native(ctx:NativeVKContext, cb:Int, pipe:Int) {}
 	@:hlNative("sdl_vk", "cmd_bind_vertex_buffer") static function cmdBindVertexBuffer_native(ctx:NativeVKContext, cb:Int, binding:Int, bid:Int, offset:Int) {}
 	@:hlNative("sdl_vk", "cmd_bind_index_buffer") static function cmdBindIndexBuffer_native(ctx:NativeVKContext, cb:Int, bid:Int, offset:Int, idxType:Int) {}
-	@:hlNative("sdl_vk", "cmd_set_viewport") static function cmdSetViewport_native(ctx:NativeVKContext, cb:Int, x:Float, y:Float, w:Float, h:Float) {}
+	@:hlNative("sdl_vk", "cmd_set_viewport") static function cmdSetViewport_native(ctx:NativeVKContext, cb:Int, x:Single, y:Single, w:Single, h:Single) {}
 	@:hlNative("sdl_vk", "cmd_set_scissor") static function cmdSetScissor_native(ctx:NativeVKContext, cb:Int, x:Int, y:Int, w:Int, h:Int) {}
 	@:hlNative("sdl_vk", "cmd_draw") static function cmdDraw_native(ctx:NativeVKContext, cb:Int, vc:Int, ic:Int, fv:Int, fi:Int) {}
 	@:hlNative("sdl_vk", "cmd_draw_indexed") static function cmdDrawIndexed_native(ctx:NativeVKContext, cb:Int, idxCount:Int, instCount:Int, firstIdx:Int, vertOff:Int, firstInst:Int) {}
@@ -173,12 +173,12 @@ class VKContext {
 
 	@:hlNative("sdl_vk", "create_image") static function createImage_native(ctx:NativeVKContext, w:Int,h:Int,fmt:Int,mips:Int,layers:Int,usage:Int):Int return -1;
 	@:hlNative("sdl_vk", "create_image_view") static function createImageView_native(ctx:NativeVKContext, imgId:Int,fmt:Int,aspect:Int,bm:Int,mc:Int,bl:Int,lc:Int):Int return 0;
-	@:hlNative("sdl_vk", "create_sampler") static function createSampler_native(ctx:NativeVKContext, filter:Int,mipMode:Int,addrMode:Int,anisotropy:Bool,maxAnisotropy:Float):Int return 0;
+	@:hlNative("sdl_vk", "create_sampler") static function createSampler_native(ctx:NativeVKContext, filter:Int,mipMode:Int,addrMode:Int,anisotropy:Bool,maxAnisotropy:Single):Int return 0;
 	@:hlNative("sdl_vk", "destroy_image") static function destroyImage_native(ctx:NativeVKContext, imgId:Int,memId:Int) {}
 	@:hlNative("sdl_vk", "destroy_image_view") static function destroyImageView_native(ctx:NativeVKContext, view:Int) {}
 	@:hlNative("sdl_vk", "destroy_sampler") static function destroySampler_native(ctx:NativeVKContext, sampler:Int) {}
 	@:hlNative("sdl_vk", "cmd_pipeline_barrier") static function cmdPipelineBarrier_native(ctx:NativeVKContext, cb:Int,srcStage:Int,dstStage:Int,srcAccess:Int,dstAccess:Int,oldLayout:Int,newLayout:Int,img:Int,aspect:Int,bm:Int,mc:Int,bl:Int,lc:Int) {}
-	@:hlNative("sdl_vk", "cmd_set_depth_bias") static function cmdSetDepthBias_native(ctx:NativeVKContext, cb:Int,cf:Float,clamp:Float,sf:Float) {}
+	@:hlNative("sdl_vk", "cmd_set_depth_bias") static function cmdSetDepthBias_native(ctx:NativeVKContext, cb:Int, cf:Single, clamp:Single, sf:Single) {}
 	@:hlNative("sdl_vk", "get_image_handle") static function getImageHandle_native(ctx:NativeVKContext, imgId:Int):Int return 0;
 	@:hlNative("sdl_vk", "get_image_width") static function getImageWidth_native(ctx:NativeVKContext, imgId:Int):Int return 0;
 	@:hlNative("sdl_vk", "get_image_height") static function getImageHeight_native(ctx:NativeVKContext, imgId:Int):Int return 0;

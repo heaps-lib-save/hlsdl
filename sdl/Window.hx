@@ -93,6 +93,7 @@ class Window {
 		}
 		this.title = title;
 		windows.push(this);
+		renderTo();
 		vsync = true;
 	}
 
@@ -293,10 +294,6 @@ class Window {
 	}
 
 	public function present() {
-		if( !isVulkan && vsync && @:privateAccess Sdl.isWin32 ) {
-			var spent = haxe.Timer.stamp() - lastFrame;
-			if( spent < 0.005 ) Sys.sleep(0.005 - spent);
-		}
 		if( !isVulkan )
 			winSwapWindow(win);
 		lastFrame = haxe.Timer.stamp();
@@ -408,6 +405,7 @@ class Window {
 	}
 
 	static function setVsync( b : Bool ) {
+		Sdl.setSwapInterval(b);
 	}
 
 	static function setWindowGrab( win : WinPtr, grab : Bool ) {

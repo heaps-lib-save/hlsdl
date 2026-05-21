@@ -1,3 +1,3 @@
-﻿package sdl;
+package sdl;
 
-abstract VKRenderPass(Null<Int>) from Int to Int {}
+abstract VKRenderPass(Int) from Int to Int {}

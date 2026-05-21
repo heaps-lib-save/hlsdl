@@ -1,3 +1,3 @@
-﻿package sdl;
+package sdl;
 
-abstract VKSampler(Null<Int>) from Int to Int {}
+abstract VKSampler(Int) from Int to Int {}

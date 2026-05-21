@@ -1,3 +1,3 @@
-﻿package sdl;
+package sdl;
 
-abstract VKFramebuffer(Null<Int>) from Int to Int {}
+abstract VKFramebuffer(Int) from Int to Int {}

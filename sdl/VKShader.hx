@@ -1,3 +1,3 @@
-﻿package sdl;
+package sdl;
 
-abstract VKShader(Null<Int>) from Int to Int {}
+abstract VKShader(Int) from Int to Int {}

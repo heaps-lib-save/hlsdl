@@ -202,6 +202,27 @@ class Sdl {
 		return false;
 	}
 
+	@:hlNative("sdl", "set_vsync")
+	public static function setSwapInterval( enable : Bool ) {
+	}
+
+	@:hlNative("sdl", "pacer_init")
+	public static function pacerInit( targetFps : Float ) {
+	}
+
+	@:hlNative("sdl", "pacer_mark")
+	public static function pacerMark() {
+	}
+
+	@:hlNative("sdl", "pacer_wait")
+	public static function pacerWait() {
+	}
+
+	@:hlNative("sdl", "pacer_interval")
+	public static function pacerInterval() : Float {
+		return 0;
+	}
+
 	static function get_display_modes(displayId : Int) : hl.NativeArray<Dynamic> {
 		return null;
 	}

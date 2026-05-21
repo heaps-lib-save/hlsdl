@@ -1,3 +1,3 @@
-﻿package sdl;
+package sdl;
 
-abstract VKCommandBuffer(Null<Int>) from Int to Int {}
+abstract VKCommandBuffer(Int) from Int to Int {}

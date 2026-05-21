@@ -1,2 +1,3 @@
-﻿package sdl;
-abstract VKBuffer(Null<Int>) from Int to Int {}
+package sdl;
+
+abstract VKBuffer(Int) from Int to Int {}

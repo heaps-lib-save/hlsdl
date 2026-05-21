@@ -1,3 +1,3 @@
-﻿package sdl;
+package sdl;
 
-abstract VKPipeline(Null<Int>) from Int to Int {}
+abstract VKPipeline(Int) from Int to Int {}
