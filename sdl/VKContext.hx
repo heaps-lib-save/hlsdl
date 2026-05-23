@@ -11,8 +11,7 @@ class VKContext {
 	public var height(get,never) : Int;
 
 	public function new(win : sdl.Window) {
-		var debug = #if debug true #else false #end;
-		native = createContextImpl(@:privateAccess win.win, debug);
+		native = createContextImpl(@:privateAccess win.win, true);
 		if (native == null) throw "Vulkan context creation failed";
 	}
 
@@ -57,7 +56,7 @@ class VKContext {
 	public function createGraphicsPipeline(vs:VKShader,fs:VKShader,layout:VKPipelineLayout,rp:VKRenderPass,vbCnt:Int,vb:hl.Bytes,vaCnt:Int,va:hl.Bytes,topo:Int,cull:Int,ff:Int,blend:Int,sblend:Int,dblend:Int,dt:Int,dw:Int,dc:Int,w:Int,h:Int,samples:Int = 1) : VKPipeline {
 		return cast createGraphicsPipeline_native(native, cast vs, cast fs, cast layout, cast rp, topo, cull, ff, blend, sblend, dblend, dt, dw, dc, samples);
 	}
-	public function destroyPipeline(p:VKPipeline) { destroyPipeline_native(native, cast p); }
+	public function destroyPipeline(p:VKPipeline) { if (cast p != 0) destroyPipeline_native(native, cast p); }
 
 	public function cmdBindPipeline(cb:Int, pipeline:VKPipeline) { cmdBindPipeline_native(native, cb, cast pipeline); }
 	public function cmdBindVertexBuffer(cb:Int, binding:Int, buf:VKBuffer, offset:Int) { cmdBindVertexBuffer_native(native, cb, binding, cast buf, offset); }
@@ -80,8 +79,8 @@ class VKContext {
 	public function updateDescriptorSetBuffer(ds:VKDescriptorSet, binding:Int, buf:VKBuffer, offset:Int, range:Int) {
 		updateDescriptorSetBuffer_native(native, cast ds, binding, cast buf, offset, range);
 	}
-	public function cmdBindDescriptorSets(cb:Int, ds:VKDescriptorSet, firstSet:Int) {
-		cmdBindDescriptorSets_native(native, cb, cast ds, firstSet);
+	public function cmdBindDescriptorSets(cb:Int, ds:VKDescriptorSet, firstSet:Int, layout:VKPipelineLayout) {
+		cmdBindDescriptorSets_native(native, cb, cast ds, firstSet, cast layout);
 	}
 	public function destroyDescriptorSetLayout(dslId:Int) { destroyDescriptorSetLayout_native(native, dslId); }
 
@@ -166,7 +165,7 @@ class VKContext {
 	@:hlNative("sdl_vk", "allocate_descriptor_set") static function allocateDescriptorSet_native(ctx:NativeVKContext, dslId:Int):Int return 0;
 	@:hlNative("sdl_vk", "update_descriptor_set_texture") static function updateDescriptorSetTexture_native(ctx:NativeVKContext, ds:Int, binding:Int, sampler:Int, view:Int) {}
 	@:hlNative("sdl_vk", "update_descriptor_set_buffer") static function updateDescriptorSetBuffer_native(ctx:NativeVKContext, ds:Int, binding:Int, buf:Int, offset:Int, range:Int) {}
-	@:hlNative("sdl_vk", "cmd_bind_descriptor_sets") static function cmdBindDescriptorSets_native(ctx:NativeVKContext, cb:Int, ds:Int, firstSet:Int) {}
+	@:hlNative("sdl_vk", "cmd_bind_descriptor_sets") static function cmdBindDescriptorSets_native(ctx:NativeVKContext, cb:Int, ds:Int, firstSet:Int, layout:Int) {}
 	@:hlNative("sdl_vk", "destroy_descriptor_set_layout") static function destroyDescriptorSetLayout_native(ctx:NativeVKContext, dslId:Int) {}
 	@:hlNative("sdl_vk", "cmd_blit_image") static function cmdBlitImage_native(ctx:NativeVKContext, cb:Int, srcId:Int, dstId:Int, srcMip:Int, dstMip:Int) {}
 	@:hlNative("sdl_vk", "cmd_copy_buffer_to_image") static function cmdCopyBufferToImage_native(ctx:NativeVKContext, cb:Int, bufId:Int, imgId:Int, mipLevel:Int, arrayLayer:Int) {}
