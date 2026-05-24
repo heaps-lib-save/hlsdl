@@ -24,7 +24,7 @@ class Vk {
     public static inline var IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL = 7; public static inline var IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL = 3;
     public static inline var PIPELINE_STAGE_TOP_OF_PIPE = 1; public static inline var PIPELINE_STAGE_TRANSFER = 4096;
     public static inline var PIPELINE_STAGE_FRAGMENT_SHADER = 128;
-    public static inline var ACCESS_TRANSFER_WRITE = 8192; public static inline var ACCESS_TRANSFER_READ = 4096;
+    public static inline var ACCESS_TRANSFER_WRITE = 4096; public static inline var ACCESS_TRANSFER_READ = 2048;
     public static inline var ACCESS_SHADER_READ = 32;
     public static inline var IMAGE_LAYOUT_UNDEFINED = 0; public static inline var IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL = 2;
     public static inline var SAMPLE_COUNT_1_BIT = 1; public static inline var SAMPLE_COUNT_4_BIT = 4;

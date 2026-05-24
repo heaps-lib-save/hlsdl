@@ -56,6 +56,9 @@ class VKContext {
 	public function createGraphicsPipeline(vs:VKShader,fs:VKShader,layout:VKPipelineLayout,rp:VKRenderPass,vbCnt:Int,vb:hl.Bytes,vaCnt:Int,va:hl.Bytes,topo:Int,cull:Int,ff:Int,blend:Int,sblend:Int,dblend:Int,dt:Int,dw:Int,dc:Int,w:Int,h:Int,samples:Int = 1) : VKPipeline {
 		return cast createGraphicsPipeline_native(native, cast vs, cast fs, cast layout, cast rp, topo, cull, ff, blend, sblend, dblend, dt, dw, dc, samples);
 	}
+	public function createGraphicsPipeline2D(vs:VKShader,fs:VKShader,layout:VKPipelineLayout,rp:VKRenderPass,vbCnt:Int,vb:hl.Bytes,vaCnt:Int,va:hl.Bytes,topo:Int,cull:Int,ff:Int,blend:Int,sblend:Int,dblend:Int,dt:Int,dw:Int,dc:Int,w:Int,h:Int,samples:Int = 1) : VKPipeline {
+		return cast createGraphicsPipeline2D_native(native, cast vs, cast fs, cast layout, cast rp, topo, cull, ff, blend, sblend, dblend, dt, dw, dc, samples);
+	}
 	public function destroyPipeline(p:VKPipeline) { if (cast p != 0) destroyPipeline_native(native, cast p); }
 
 	public function cmdBindPipeline(cb:Int, pipeline:VKPipeline) { cmdBindPipeline_native(native, cb, cast pipeline); }
@@ -112,6 +115,7 @@ class VKContext {
 	public function getImageHandle(img:VKImage) : Int return getImageHandle_native(native, cast img);
 	public function getImageWidth(img:VKImage) : Int return getImageWidth_native(native, cast img);
 	public function getImageHeight(img:VKImage) : Int return getImageHeight_native(native, cast img);
+	public function uploadTextureData(img:Int, data:hl.Bytes, offset:Int, size:Int, mipLevel:Int, side:Int) : Bool return uploadTextureData_native(native, img, data, offset, size, mipLevel, side);
 
 	@:hlNative("sdl_vk", "create_context") static function createContextImpl(win:hl.Abstract<"sdl_window">, debug:Bool):NativeVKContext return null;
 	@:hlNative("sdl_vk", "destroy_context") static function destroyContextImpl(ctx:NativeVKContext) {}
@@ -149,6 +153,7 @@ class VKContext {
 	@:hlNative("sdl_vk", "destroy_pipeline_layout") static function destroyPipelineLayout_native(ctx:NativeVKContext, pl:Int) {}
 
 	@:hlNative("sdl_vk", "create_graphics_pipeline") static function createGraphicsPipeline_native(ctx:NativeVKContext, vs:Int,fs:Int,layout:Int,rp:Int,topo:Int,cull:Int,ff:Int,blend:Int,sblend:Int,dblend:Int,dt:Int,dw:Int,dc:Int,samples:Int):Int return 0;
+	@:hlNative("sdl_vk", "create_graphics_pipeline_2d") static function createGraphicsPipeline2D_native(ctx:NativeVKContext, vs:Int,fs:Int,layout:Int,rp:Int,topo:Int,cull:Int,ff:Int,blend:Int,sblend:Int,dblend:Int,dt:Int,dw:Int,dc:Int,samples:Int):Int return 0;
 	@:hlNative("sdl_vk", "destroy_pipeline") static function destroyPipeline_native(ctx:NativeVKContext, p:Int) {}
 
 	@:hlNative("sdl_vk", "cmd_bind_pipeline") static function cmdBindPipeline_native(ctx:NativeVKContext, cb:Int, pipe:Int) {}
@@ -181,6 +186,7 @@ class VKContext {
 	@:hlNative("sdl_vk", "get_image_handle") static function getImageHandle_native(ctx:NativeVKContext, imgId:Int):Int return 0;
 	@:hlNative("sdl_vk", "get_image_width") static function getImageWidth_native(ctx:NativeVKContext, imgId:Int):Int return 0;
 	@:hlNative("sdl_vk", "get_image_height") static function getImageHeight_native(ctx:NativeVKContext, imgId:Int):Int return 0;
+	@:hlNative("sdl_vk", "upload_texture_data") static function uploadTextureData_native(ctx:NativeVKContext, imgId:Int, data:hl.Bytes, offset:Int, size:Int, mipLevel:Int, side:Int):Bool return false;
 }
 
 #end
